@@ -1,9 +1,6 @@
 package com.example.authorization.services;
 
-import com.example.authorization.dtos.LoginResponseDto;
-import com.example.authorization.dtos.LogoutResponseDto;
-import com.example.authorization.dtos.SignupResponseDto;
-import com.example.authorization.dtos.UserDetailsRequestDto;
+import com.example.authorization.dtos.*;
 import com.example.authorization.exceptions.LoginFailedException;
 import com.example.authorization.exceptions.UserAlreadyExist;
 import com.example.authorization.models.Sessions;
@@ -83,10 +80,20 @@ public class AuthorizationServiceImpl implements AuthorizationService{
         return loginResponseDto;
     }
 
-    @Transactional
-    public LogoutResponseDto logout(String token)
+    //@Transactional
+    public LogoutResponseDto logout(LogoutRequestDto logoutRequestDto)
     {
-         sessionRepo.deleteByToken(token);
+         String token = logoutRequestDto.getToken();
+         //sessionRepo.deleteByToken(token);
+        /*
+            If we delete using deleteByToken(token) then
+            we have to make the function as @Transactional.
+            Spring translates the method to JPQL(Java Persistence
+            Query Language) which is executed within a transaction.
+
+         */
+        Sessions sessions = sessionRepo.findByToken(token);
+        sessionRepo.delete(sessions);
 
         LogoutResponseDto logoutResponseDto = new LogoutResponseDto();
         logoutResponseDto.setMessage("User has been logged out");

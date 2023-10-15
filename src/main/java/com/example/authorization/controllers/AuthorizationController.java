@@ -1,9 +1,6 @@
 package com.example.authorization.controllers;
 
-import com.example.authorization.dtos.LoginResponseDto;
-import com.example.authorization.dtos.LogoutResponseDto;
-import com.example.authorization.dtos.SignupResponseDto;
-import com.example.authorization.dtos.UserDetailsRequestDto;
+import com.example.authorization.dtos.*;
 import com.example.authorization.services.AuthorizationService;
 import com.example.authorization.services.AuthorizationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +43,10 @@ public class AuthorizationController
 
     }
 
-    @PostMapping("/logout/{token}")
-    public ResponseEntity<LogoutResponseDto> logout(@PathVariable("token") String token)
+    @PostMapping("/logout")
+    public ResponseEntity<LogoutResponseDto> logout(@RequestBody LogoutRequestDto logoutRequestDto)
     {
-        LogoutResponseDto logoutResponseDto = authorizationService.logout(token);
+        LogoutResponseDto logoutResponseDto = authorizationService.logout(logoutRequestDto);
         return new ResponseEntity<>(
                 logoutResponseDto,
                 HttpStatus.OK

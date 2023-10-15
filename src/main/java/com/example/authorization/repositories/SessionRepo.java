@@ -12,5 +12,8 @@ public interface SessionRepo extends JpaRepository<Sessions,Long> {
 
     void deleteByToken(String token);
 
+    @Override
+    void delete(Sessions entity);
 
+    Sessions findByToken(String token);
 }
